@@ -27,7 +27,10 @@ class VinylMix
     private ?string $genre = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createAt = null;
+    private ?\DateTimeImmutable $createAt;
+
+    #[ORM\Column]
+    private ?int $votes = 0;
 
     public function getId(): ?int
     {
@@ -82,14 +85,19 @@ class VinylMix
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function __construct()
     {
-        return $this->createAt;
+        $this->createAt = new \DateTimeImmutable();
     }
 
-    public function setCreateAt(\DateTimeImmutable $createAt): static
+    public function getVotes(): ?int
     {
-        $this->createAt = $createAt;
+        return $this->votes;
+    }
+
+    public function setVotes(int $votes): static
+    {
+        $this->votes = $votes;
 
         return $this;
     }
