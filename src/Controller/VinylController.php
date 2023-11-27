@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+
 class VinylController extends AbstractController
 {
     #[Route('/', name: 'app_homepage')]
@@ -35,5 +36,5 @@ class VinylController extends AbstractController
             'genre' => $genre,
             'mixes' => $mixes,
         ]);
-    }
+    }    
 }
