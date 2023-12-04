@@ -24,25 +24,37 @@ class VinylMixRepository extends ServiceEntityRepository
 //    /**
 //     * @return VinylMix[] Returns an array of VinylMix objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('v.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findByExampleField($value): array
+    {
+       return $this->createQueryBuilder('v')
+           ->andWhere('v.exampleField = :val')
+           ->setParameter('val', $value)
+           ->orderBy('v.id', 'ASC')
+          ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+      ;
+    }
 
-//    public function findOneBySomeField($value): ?VinylMix
-//    {
-//        return $this->createQueryBuilder('v')
-//            ->andWhere('v.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findAllOrderedByVotes($value): ?VinylMix
+   {
+    $queryBuilder = $this->addOrderByVotesQueryBuilder();
+    return $this->createQueryBuilder('mix')
+    ->orderBy('mix.votes', 'DESC');
+
+    return $queryBuilder
+    ->getQuery()
+    ->getResult()
+
+    if ($genre) {
+        $queryBuilder->andWhere('mix.genre = :genre')
+            ->setParameter('genre', $genre);
+    }
+    private function addOrderByVotesQueryBuilder(QueryBuilder $queryBuilder = null): QueryBuilder
+    {
+        $queryBuilder = $queryBuilder ?? $this->createQueryBuilder('mix');
+    }
+
+    }
 }
+
