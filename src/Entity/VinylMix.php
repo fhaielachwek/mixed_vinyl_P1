@@ -37,6 +37,9 @@ class VinylMix
     #[Slug(fields: ['title'])]
     private ?string $slug = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $string = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +139,18 @@ class VinylMix
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getString(): ?string
+    {
+        return $this->string;
+    }
+
+    public function setString(string $string): static
+    {
+        $this->string = $string;
 
         return $this;
     }
