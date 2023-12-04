@@ -5,13 +5,17 @@ namespace App\Entity;
 use App\Repository\VinylMixRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: VinylMixRepository::class)]
 class VinylMix
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column()]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -27,10 +31,11 @@ class VinylMix
     private ?string $genre = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createAt;
+    private int $votes = 0;
 
-    #[ORM\Column]
-    private ?int $votes = 0;
+    #[ORM\Column(length: 100, unique: true)]
+    #[Slug(fields: ['title'])]
+    private ?string $slug = null;
 
     public function getId(): ?int
     {
@@ -42,7 +47,7 @@ class VinylMix
         return $this->title;
     }
 
-    public function setTitle(string $title): static
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -54,7 +59,7 @@ class VinylMix
         return $this->description;
     }
 
-    public function setDescription(?string $description): static
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -66,7 +71,7 @@ class VinylMix
         return $this->trackCount;
     }
 
-    public function setTrackCount(int $trackCount): static
+    public function setTrackCount(int $trackCount): self
     {
         $this->trackCount = $trackCount;
 
@@ -78,16 +83,11 @@ class VinylMix
         return $this->genre;
     }
 
-    public function setGenre(string $genre): static
+    public function setGenre(string $genre): self
     {
         $this->genre = $genre;
 
         return $this;
-    }
-
-    public function __construct()
-    {
-        $this->createAt = new \DateTimeImmutable();
     }
 
     public function getVotes(): ?int
@@ -95,16 +95,27 @@ class VinylMix
         return $this->votes;
     }
 
-    public function setVotes(int $votes): static
+    public function setVotes(int $votes): self
     {
         $this->votes = $votes;
 
         return $this;
     }
 
+    public function upVote(): void
+    {
+        $this->votes++;
+    }
+
+    public function downVote(): void
+    {
+        $this->votes--;
+    }
+
     public function getVotesString(): string
     {
         $prefix = ($this->votes === 0) ? '' : (($this->votes >= 0) ? '+' : '-');
+
         return sprintf('%s %d', $prefix, abs($this->votes));
     }
 
@@ -117,13 +128,15 @@ class VinylMix
         );
     }
 
-    public function upVote(): void
+    public function getSlug(): ?string
     {
-        $this->votes++;
-    }
-    public function downVote(): void
-    {
-        $this->votes--;
+        return $this->slug;
     }
 
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
 }
